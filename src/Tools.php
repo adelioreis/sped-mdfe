@@ -860,6 +860,7 @@ class Tools extends BaseTools
         $aliasEvento = $aRet['alias'];
         $cnpj = $this->aConfig['cnpj'];
         $dhEvento = (string) str_replace(' ', 'T', date('Y-m-d H:i:s'));
+        $dhEvento .= '-03:00';
         $sSeqEvento = str_pad($nSeqEvento, 2, "0", STR_PAD_LEFT);
         $eventId = "ID".$tpEvento.$chave.$sSeqEvento;
         if ($cOrgao == '') {
@@ -966,11 +967,13 @@ class Tools extends BaseTools
             $this->aConfig['schemesMDFe'] .
             DIRECTORY_SEPARATOR .
             $xsdFile;
-        if (! is_file($xsdPath)) {
+
+        if (!is_file($xsdPath)) {
             $this->errors[] = "O arquivo XSD $xsdFile não foi localizado.";
             return false;
         }
-        if (! ValidXsd::validar($aResp['xml'], $xsdPath)) {
+
+        if (!ValidXsd::validar($aResp['xml'], $xsdPath)) {
             $this->errors[] = ValidXsd::$errors;
             return false;
         }
