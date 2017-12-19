@@ -1990,7 +1990,7 @@ class Make300
         return $this->xml;
     }
 
-    public function montaChave($cuf, $ano, $mes, $cnpj, $mod, $serie, $numero, $tpEmissao, $numero) {
-        return Keys::build($cuf, $ano, $mes, $cnpj, $mod, $serie, $numero, $tpEmissao, $numero);
+    public function montaChave($cuf, $ano, $mes, $cnpj, $mod, $serie, $numero, $tpEmissao, $codigo) {
+        return Keys::build($cuf, $ano, $mes, $cnpj, $mod, $serie, $numero, $tpEmissao, $codigo);
     }
 }
