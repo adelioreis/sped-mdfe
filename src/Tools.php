@@ -13,17 +13,14 @@ namespace NFePHP\MDFe;
  * @author    Roberto L. Machado <linux.rlm at gmail dot com>
  */
 
-use NFePHP\Common\Base\BaseTools;
-use NFePHP\Common\DateTime\DateTime;
-use NFePHP\Common\LotNumber\LotNumber;
-use NFePHP\Common\Strings\Strings;
-use NFePHP\Common\Files;
+use NFePHP\Common\DOMImproved as Dom;
 use NFePHP\Common\Exception;
-use NFePHP\Common\Dom\Dom;
-use NFePHP\Common\Dom\ValidXsd;
-use NFePHP\MDFe\Auxiliar\Response;
-use NFePHP\MDFe\Mail;
 use NFePHP\MDFe\Auxiliar\Identify;
+use NFePHP\MDFe\Auxiliar\Response;
+use NFePHP\MDFe\Deprecated\BaseTools;
+use NFePHP\MDFe\Deprecated\FilesFolders;
+use NFePHP\MDFe\Deprecated\Strings;
+use NFePHP\MDFe\Mail;
 
 if (!defined('NFEPHP_ROOT')) {
     define('NFEPHP_ROOT', dirname(dirname(__FILE__)));
@@ -318,7 +315,7 @@ class Tools extends BaseTools
             throw new Exception\InvalidArgumentException($msg);
         }
         //carrega a MDFe
-        $xml = Files\FilesFolders::readFile($pathXmlFile);
+        $xml = FilesFolders::readFile($pathXmlFile);
         $this->oCertificate->verifySignature($xml, 'infMDFe');
         //obtem o chave da MDFe
         $docmdfe = new Dom();
@@ -701,6 +698,8 @@ class Tools extends BaseTools
         if ($nSeqEvento == '') {
             $nSeqEvento = '1';
         }
+        //$dtEnc = (string) str_replace(' ', 'T', date('Y-m-d H:i:s'));
+        //$dtEnc .= '-03:00';
         $dtEnc = date('Y-m-d');
         $tagAdic = "<evEncMDFe><descEvento>Encerramento</descEvento>"
                 . "<nProt>$nProt</nProt><dtEnc>$dtEnc</dtEnc><cUF>$cUF</cUF>"

@@ -18,11 +18,10 @@ namespace NFePHP\MDFe;
  * @author    Roberto L. Machado <linux.rlm at gmail dot com>
  */
 
-use NFePHP\Common\DateTime\DateTime;
-use NFePHP\Common\Base\BaseMake;
-use \DOMElement;
+use NFePHP\Common\DOMImproved as Dom;
+use NFePHP\Common\Keys;
 
-class Make300 extends BaseMake
+class Make300
 {
     /**
      * versao
@@ -30,7 +29,7 @@ class Make300 extends BaseMake
      *
      * @var string
      */
-    public $versao = '1.00';
+    public $versao = '3.00';
     /**
      * mod
      * modelo da MDFe 58
@@ -50,6 +49,10 @@ class Make300 extends BaseMake
      * @type string|\DOMNode
      */
     private $MDFe = '';
+    /**
+     * @var \NFePHP\Common\DOMImproved
+     */
+    public $dom;
     /**
      * @type string|\DOMNode
      */
@@ -89,10 +92,6 @@ class Make300 extends BaseMake
     /**
      * @type string|\DOMNode
      */
-    private $infAdic = '';
-    /**
-     * @type string|\DOMNode
-     */
     private $infContratante = '';
     /**
      * @type string|\DOMNode
@@ -124,6 +123,7 @@ class Make300 extends BaseMake
     private $aqua = '';
 
     // Arrays
+    private $infAdic = [];
     private $aInfMunCarrega = []; //array de DOMNode
     private $aInfPercurso = []; //array de DOMNode
     private $aInfMunDescarga = []; //array de DOMNode
@@ -140,6 +140,18 @@ class Make300 extends BaseMake
     private $aInfTermDescarreg = []; //array de DOMNode
     private $aInfEmbComb = []; //array de DOMNode
     private $aCountDoc = []; //contador de documentos fiscais
+    public $erros = [];
+
+    /**
+     * Função construtora cria um objeto DOMDocument
+     * que será carregado com o documento fiscal
+     */
+    public function __construct()
+    {
+        $this->dom = new Dom('1.0', 'UTF-8');
+        $this->dom->preserveWhiteSpace = false;
+        $this->dom->formatOutput = false;
+    }
 
     /**
      *
@@ -150,8 +162,10 @@ class Make300 extends BaseMake
         if (count($this->erros) > 0) {
             return false;
         }
+
         //cria a tag raiz da MDFe
         $this->zTagMDFe();
+        print_r($this->MDFe->attributes->item(0));
         //monta a tag ide com as tags adicionais
         $this->zTagIde();
         //tag ide [4]
@@ -178,13 +192,15 @@ class Make300 extends BaseMake
             $this->dom->appChild($this->infMDFe, $aut, 'Falta tag "infMDFe"');
         }
         //tag infAdic [78]
+        $this->infAdic = $this->dom->createElement("infAdic");
         $this->dom->appChild($this->infMDFe, $this->infAdic, 'Falta tag "infMDFe"');
         //[1] tag infMDFe (1 A01)
         $this->dom->appChild($this->MDFe, $this->infMDFe, 'Falta tag "MDFe"');
         //[0] tag MDFe
-        $this->dom->appChild($this->dom, $this->MDFe, 'Falta DOMDocument');
+        $this->dom->appendChild($this->MDFe);
+
         // testa da chave
-        $this->zTestaChaveXML($this->dom);
+        //$this->zTestaChaveXML($this->dom);
         //convert DOMDocument para string
         $this->xml = $this->dom->saveXML();
         return true;
@@ -208,6 +224,7 @@ class Make300 extends BaseMake
         $this->infMDFe->setAttribute("versao", $versao);
         $this->chMDFe = $chave;
         $this->versao = $versao;
+
         return $this->infMDFe;
     }
 
@@ -364,6 +381,7 @@ class Make300 extends BaseMake
         );
         $this->mod = $mod;
         $this->ide = $ide;
+
         return $ide;
     }
 
@@ -1939,7 +1957,7 @@ class Make300 extends BaseMake
         $cNF = $ide->getElementsByTagName('cMDF')->item(0)->nodeValue;
         $chave = str_replace('MDFe', '', $infMDFe->getAttribute("Id"));
         $tempData = explode("-", $dhEmi);
-        $chaveMontada = $this->montaChave(
+        $chaveMontada = Keys::build(
             $cUF,
             $tempData[0] - 2000,
             $tempData[1],
@@ -1958,5 +1976,21 @@ class Make300 extends BaseMake
             $infMDFe->setAttribute("Id", "MDFe" . $chaveMontada);
             $this->chMDFe = $chaveMontada;
         }
+    }
+
+    /**
+     * Returns xml string and assembly it is necessary
+     * @return string
+     */
+    public function getXML()
+    {
+        if (empty($this->xml)) {
+            $this->montaMDFe();
+        }
+        return $this->xml;
+    }
+
+    public function montaChave($cuf, $ano, $mes, $cnpj, $mod, $serie, $numero, $tpEmissao, $numero) {
+        return Keys::build($cuf, $ano, $mes, $cnpj, $mod, $serie, $numero, $tpEmissao, $numero);
     }
 }

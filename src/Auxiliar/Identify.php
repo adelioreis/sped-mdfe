@@ -13,9 +13,6 @@ namespace NFePHP\MDFe\Auxiliar;
  * @link      http://github.com/nfephp-org/nfephp for the canonical source repository
  */
 
-use \DOMDocument;
-use NFePHP\Common\Identify\Identify as Id;
-
 class Identify
 {
     public static function identificar($xml = '', &$aResp = array())
@@ -37,7 +34,7 @@ class Identify
             'retEnviMDFe' => 'retEnviMDFe',
             'retEventoMDFe' => 'retEventoMDFe'
         );
-        Id::setListSchemesId($aList);
+        /*Id::setListSchemesId($aList);
         $schem = Id::identificacao($xml, $aResp);
         $dom = $aResp['dom'];
         $node = $dom->getElementsByTagName($aResp['tag'])->item(0);
@@ -51,6 +48,6 @@ class Identify
         }
         $aResp['versao'] = $versao;
         $aResp['xml'] = $dom->saveXML($node);
-        return $schem;
+        return $schem;*/
     }
 }

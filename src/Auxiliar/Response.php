@@ -13,7 +13,7 @@ namespace NFePHP\MDFe\Auxiliar;
  * @link      http://github.com/nfephp-org/nfephp for the canonical source repository
  */
 
-use NFePHP\Common\Dom\Dom;
+use NFePHP\Common\DOMImproved as Dom;
 
 class Response
 {

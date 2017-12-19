@@ -6,10 +6,8 @@
  * Date: 25/07/2017
  * Time: 18:34
  */
-use NFePHP\MDFe\Tools;
 use NFePHP\MDFe\Make300;
-use NFePHP\Common\Files\FilesFolders;
-use NFePHP\Common\Dom\Dom;
+use NFePHP\MDFe\Tools;
 
 class ProcessoCompletoTest extends PHPUnit_Framework_TestCase
 {
@@ -24,7 +22,7 @@ class ProcessoCompletoTest extends PHPUnit_Framework_TestCase
     }
 
     private function configurarJson() {
-        $configJson = FilesFolders::readFile(PATH_CONFIG);
+        $configJson = file_get_contents(PATH_CONFIG);
         $this->objConfig = json_decode($configJson);
         $this->objConfig->razaosocial = 'EMPRESA EMITENTE';
         $this->objConfig->pathCertsFiles = PATH_BASE . 'certs' . DIRECTORY_SEPARATOR;
