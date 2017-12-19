@@ -18,6 +18,7 @@ use NFePHP\Common\Exception;
 use NFePHP\MDFe\Auxiliar\Identify;
 use NFePHP\MDFe\Auxiliar\Response;
 use NFePHP\MDFe\Deprecated\BaseTools;
+use NFePHP\MDFe\Deprecated\DateTime;
 use NFePHP\MDFe\Deprecated\FilesFolders;
 use NFePHP\MDFe\Deprecated\Strings;
 use NFePHP\MDFe\Mail;
