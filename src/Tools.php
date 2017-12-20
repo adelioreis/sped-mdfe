@@ -859,8 +859,8 @@ class Tools extends BaseTools
         $aRet = $this->zTpEv($tpEvento);
         $aliasEvento = $aRet['alias'];
         $cnpj = $this->aConfig['cnpj'];
-        $dhEvento = (string) str_replace(' ', 'T', date('Y-m-d H:i:s'));
-        $dhEvento .= '-03:00';
+        $dhEvento = (string) str_replace(' ', 'T', date('Y-m-d '));
+        $dhEvento .= '00:00:00-03:00';//Nao pode passar hora aqui
         $sSeqEvento = str_pad($nSeqEvento, 2, "0", STR_PAD_LEFT);
         $eventId = "ID".$tpEvento.$chave.$sSeqEvento;
         if ($cOrgao == '') {
